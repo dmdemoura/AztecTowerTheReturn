@@ -6,6 +6,7 @@ public class Player : MonoBehaviour {
 	[SerializeField]	private LayerMask Enemies;
 	[SerializeField]	private int lives;
 	[SerializeField]	private int health;
+	[SerializeField]	private int hearts;
 	[SerializeField]	private int damage;
 	[SerializeField]	private int horizontalSpeed;
 	[SerializeField]	private int verticalSpeed;
@@ -36,14 +37,15 @@ public class Player : MonoBehaviour {
 
 		//Attacking
 		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, raySide*Vector2.right, rayDistance, Enemies);
-//		Debug.DrawLine(this.transform.position, transform.position + Vector3.right*rayDistance, Color.green);
-
-		if(hit.collider!=null)
-		{
-			Debug.Log("foi");
-			if(hit.transform.gameObject.tag=="Enemy")
-			{	
-				AttemptHit(hit.transform.gameObject);
+		
+		if(Input.GetKeyDown(KeyCode.Z))
+			{
+			if(hit.collider!=null)
+			{
+				if(hit.transform.gameObject.tag=="Enemy")
+				{	
+					AttemptHit(hit.transform.gameObject);
+				}
 			}
 		}
 	}
@@ -52,6 +54,7 @@ public class Player : MonoBehaviour {
 	{
 		if(attacking==false)
 		{
+			Debug.Log("foi");
 			enemy.SendMessage("GetHit",damage);
 			enemy.SendMessage("DrawAggro");
 			StartCoroutine(attackDelay());
@@ -67,5 +70,9 @@ public class Player : MonoBehaviour {
 		attacking = true;
 		yield return new WaitForSeconds(enemyAttackDelay);
 		attacking = false;
+	}
+
+	public void PickUpHeart(){
+		hearts++;
 	}
 }		

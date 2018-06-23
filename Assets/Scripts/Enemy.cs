@@ -3,18 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour {
-
+public class Enemy : MonoBehaviour 
+{
 	List<GameObject> targets = new List<GameObject>();
 	GameObject currentTarget;
+	[SerializeField] GameObject heart;
 	Vector2 targetPos;
 	bool isAttacking = false;
 	enum FacingSide {Left, Right};
 	FacingSide facingDirection;
 	Rigidbody2D rigid;
+	[SerializeField]
+	LayerMask Player;
+	[SerializeField]
+	LayerMask Towers;
+	int PlayerAndTowers;
+
 
 	[SerializeField]
 	float speed, xMoveOffset, yMoveOffset, hitRange, attackDelay, enemyDamage;
+	[SerializeField]
+	int health;
 
 	void Update()
 	{
@@ -27,6 +36,8 @@ public class Enemy : MonoBehaviour {
 	// Use this for initialization
 	void Awake()
 	 {
+		PlayerAndTowers = Player.value & Towers.value;
+
 		rigid = this.GetComponent<Rigidbody2D>();
 
 		targets.AddRange(GameObject.FindGameObjectsWithTag("Tower"));
@@ -61,7 +72,6 @@ public class Enemy : MonoBehaviour {
 	void TrackMovingTarget()
 	{
 		targetPos = currentTarget.transform.position;
-		Debug.Log(Mathf.Abs(((Vector2)this.transform.position - targetPos).x));
 
 		if(!isAttacking)
 		{
@@ -73,7 +83,7 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
-	IEnumerator AttemptAttack()
+		IEnumerator AttemptAttack()
 	{
 		isAttacking = true;
 
@@ -83,13 +93,16 @@ public class Enemy : MonoBehaviour {
 			hitDirection = Vector2.left;
 		else
 			hitDirection = Vector2.right;
-
-		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, hitDirection, hitRange);
+		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, hitDirection, hitRange, PlayerAndTowers);
 		if(hit)
 		{
+			Debug.Log("Yo3");
 			yield return new WaitForSeconds(attackDelay);
 			if(hit.transform.gameObject.tag != "Enemy")
+			{
+				Debug.Log("Yo4");
 				hit.transform.gameObject.SendMessage("GetHit", enemyDamage);
+			}
 		}
 		isAttacking = false;
 	}
@@ -97,7 +110,29 @@ public class Enemy : MonoBehaviour {
 	void DrawAggro()
 	{
 		CancelInvoke("TrackStillTarget");
+		CancelInvoke("TrackMovingTarget");
 		currentTarget = GameObject.FindGameObjectWithTag("Player");
 		InvokeRepeating("TrackMovingTarget", 0f, Time.deltaTime);
+	}
+
+	void GetHit(int damage)
+	{
+		if(health>=damage)
+			health -= damage;
+		else
+			health=0;
+
+		if(health==0)
+			Die();
+
+	}
+
+	void Die()
+	{
+		if(Random.Range(0f,1f)<=0.3f)
+		{
+			Instantiate(heart,this.transform.position,Quaternion.identity);
+		}
+		Destroy(this.gameObject);
 	}
 }
