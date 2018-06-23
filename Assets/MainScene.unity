@@ -163,10 +163,10 @@ Transform:
   m_GameObject: {fileID: 33821965}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 30, y: 15, z: 1}
+  m_LocalScale: {x: 50, y: 50, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &33821968
 MonoBehaviour:
@@ -247,7 +247,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 489951421}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.35178655, y: 0.06537321, z: 0.38493922}
+  m_LocalPosition: {x: 0, y: 0, z: 100}
   m_LocalScale: {x: 0.12654193, y: 0.07105784, z: 0.38493922}
   m_Children: []
   m_Father: {fileID: 543555266}
@@ -372,7 +372,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 543555262}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.78, y: -0.92, z: -0.081495285}
+  m_LocalPosition: {x: -5.97, y: -0.52, z: 0}
   m_LocalScale: {x: 7.9025187, y: 14.073042, z: 2.5978127}
   m_Children:
   - {fileID: 489951423}
@@ -400,6 +400,48 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!1001 &674650745
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4026314614771650, guid: 977377994057ff34b95d77a273e522b3, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 1.1918521
+      objectReference: {fileID: 0}
+    - target: {fileID: 4026314614771650, guid: 977377994057ff34b95d77a273e522b3, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -5.2847
+      objectReference: {fileID: 0}
+    - target: {fileID: 4026314614771650, guid: 977377994057ff34b95d77a273e522b3, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4026314614771650, guid: 977377994057ff34b95d77a273e522b3, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4026314614771650, guid: 977377994057ff34b95d77a273e522b3, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4026314614771650, guid: 977377994057ff34b95d77a273e522b3, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4026314614771650, guid: 977377994057ff34b95d77a273e522b3, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4026314614771650, guid: 977377994057ff34b95d77a273e522b3, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 977377994057ff34b95d77a273e522b3, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1407567121
 GameObject:
   m_ObjectHideFlags: 0
@@ -468,11 +510,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1407567121}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.48, y: -4.13, z: 0}
+  m_LocalPosition: {x: 0.48, y: -4.13, z: 20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1534685794
 GameObject:
@@ -574,7 +616,7 @@ Transform:
   m_LocalScale: {x: 7.6871753, y: -15.448813, z: 2.5978127}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1534685798
 Rigidbody2D:
@@ -697,7 +739,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1779342952}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.35178655, y: 0.06537321, z: -3.8493922}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 0.12654193, y: 0.07105784, z: 0.38493922}
   m_Children: []
   m_Father: {fileID: 543555266}

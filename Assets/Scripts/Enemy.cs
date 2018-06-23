@@ -39,7 +39,7 @@ public class Enemy : MonoBehaviour
 	void Awake()
 	 {
 
-		PlayerAndTowers = Player.value & Towers.value;
+		PlayerAndTowers = Player.value | Towers.value;
 
 		rigid = this.GetComponent<Rigidbody2D>();
 
@@ -91,6 +91,7 @@ public class Enemy : MonoBehaviour
 		IEnumerator AttemptAttack()
 	{
 		isAttacking = true;
+//		Debug.Log("Yo, i1m attacking");
 
 		Vector2 hitDirection;
 
@@ -101,7 +102,7 @@ public class Enemy : MonoBehaviour
 		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, hitDirection, hitRange, PlayerAndTowers);
 		if(hit)
 		{
-			Debug.Log("Yo3");
+//			Debug.Log("Yo3");
 			yield return new WaitForSeconds(attackDelay);
 			if(hit.transform.gameObject.tag != "Enemy"
 			&& Mathf.Abs(hit.transform.position.z - this.transform.position.z)<= zOffset)
