@@ -37,6 +37,7 @@ public class Player : MonoBehaviour {
 		}
 
         //Animation
+        if (Input.GetAxis("Horizontal") == 0) animator.SetTrigger("startIdle");
         animator.SetFloat("direction", Input.GetAxis("Horizontal"));
 
 		//Movement
