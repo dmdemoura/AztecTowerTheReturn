@@ -99,7 +99,7 @@ public class Enemy : MonoBehaviour
 			hitDirection = Vector2.left;
 		else
 			hitDirection = Vector2.right;
-		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, hitDirection, hitRange, Towers);
+		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, hitDirection, hitRange, Player);
 		if(hit)
 		{
 			Debug.Log("Yo3");
