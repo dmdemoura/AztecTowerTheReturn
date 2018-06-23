@@ -8,7 +8,8 @@ public class Enemy : MonoBehaviour
 	List<GameObject> targets = new List<GameObject>();
 	GameObject currentTarget;
 	[SerializeField] GameObject heart;
-	Vector2 targetPos;
+	[SerializeField] float zOffset;
+	Vector3 targetPos;
 	bool isAttacking = false;
 	enum FacingSide {Left, Right};
 	FacingSide facingDirection;
@@ -27,6 +28,8 @@ public class Enemy : MonoBehaviour
 
 	void Update()
 	{
+		this.transform.position = new Vector3(this.transform.position.x,
+								this.transform.position.y,this.transform.position.y);
 		if(rigid.velocity.x > 0)
 			facingDirection = FacingSide.Right;
 		else if(rigid.velocity.x < 0)
@@ -36,6 +39,7 @@ public class Enemy : MonoBehaviour
 	// Use this for initialization
 	void Awake()
 	 {
+
 		PlayerAndTowers = Player.value & Towers.value;
 
 		rigid = this.GetComponent<Rigidbody2D>();
@@ -61,9 +65,9 @@ public class Enemy : MonoBehaviour
 	{
 		if(!isAttacking)
 		{
-			if(Mathf.Abs(((Vector2)this.transform.position - targetPos).x) > xMoveOffset
-			|| Mathf.Abs(((Vector2)this.transform.position - targetPos).y) > yMoveOffset)
-				this.transform.position = Vector2.MoveTowards(this.transform.position, targetPos, speed);
+			if(Mathf.Abs((this.transform.position - targetPos).x) > xMoveOffset
+			|| Mathf.Abs((this.transform.position - targetPos).y) > yMoveOffset)
+				this.transform.position = Vector3.MoveTowards(this.transform.position, targetPos, speed);
 			else
 				StartCoroutine(AttemptAttack());
 		}
@@ -75,9 +79,9 @@ public class Enemy : MonoBehaviour
 
 		if(!isAttacking)
 		{
-			if(Mathf.Abs(((Vector2)this.transform.position - targetPos).x) > xMoveOffset
-			|| Mathf.Abs(((Vector2)this.transform.position - targetPos).y) > yMoveOffset)
-				this.transform.position = Vector2.MoveTowards(this.transform.position, targetPos, speed);
+			if(Mathf.Abs((this.transform.position - targetPos).x) > xMoveOffset
+			|| Mathf.Abs((this.transform.position - targetPos).y) > yMoveOffset)
+				this.transform.position = Vector3.MoveTowards(this.transform.position, targetPos, speed);
 			else
 				StartCoroutine(AttemptAttack());
 		}
@@ -98,7 +102,8 @@ public class Enemy : MonoBehaviour
 		{
 			Debug.Log("Yo3");
 			yield return new WaitForSeconds(attackDelay);
-			if(hit.transform.gameObject.tag != "Enemy")
+			if(hit.transform.gameObject.tag != "Enemy"
+			&& Mathf.Abs(hit.transform.position.z - this.transform.position.z)<= zOffset)
 			{
 				Debug.Log("Yo4");
 				hit.transform.gameObject.SendMessage("GetHit", enemyDamage);
@@ -111,7 +116,6 @@ public class Enemy : MonoBehaviour
 	{
 		CancelInvoke("TrackStillTarget");
 		CancelInvoke("TrackMovingTarget");
-        CancelInvoke("TrackMovingTarget");
 		currentTarget = GameObject.FindGameObjectWithTag("Player");
 		InvokeRepeating("TrackMovingTarget", 0f, Time.deltaTime);
 	}
@@ -125,7 +129,6 @@ public class Enemy : MonoBehaviour
 
 		if(health==0)
 			Die();
-
 	}
 
 	void Die()
