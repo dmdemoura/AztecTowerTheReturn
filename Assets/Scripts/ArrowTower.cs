@@ -8,6 +8,10 @@ public class ArrowTower : MonoBehaviour
     [SerializeField] private float fireRate;
     [SerializeField] private float arrowSpawnDistance;
     [SerializeField] private float arrowVelocity;
+    [SerializeField] private float reconstructTime;
+    [SerializeField] private int health;
+    private enum State{broken, active};
+    private State state = State.active;
 
     private void Start()
     {
@@ -47,9 +51,28 @@ public class ArrowTower : MonoBehaviour
         return closest;
     }
     private void Fire()
+    {   
+        if(state==State.active){
+            GameObject newArrow = Instantiate(arrow, transform.position + transform.rotation * new Vector3(arrowSpawnDistance,0), transform.rotation);
+            newArrow.GetComponent<Rigidbody2D>().velocity = transform.rotation * new Vector3(arrowVelocity,0);
+        }
+    }
+
+    private IEnumerator reconstructing()
     {
-        GameObject newArrow = Instantiate(arrow, transform.position + transform.rotation * new Vector3(arrowSpawnDistance,0), transform.rotation);
-        newArrow.GetComponent<Rigidbody2D>().velocity = transform.rotation * new Vector3(arrowVelocity,0);
- 
+        state = State.broken;
+        yield return new WaitForSeconds(reconstructTime);
+        state = State.active;
+    }
+
+    public void GetHit(int damage)
+	{
+		if(health>=damage)
+			health -= damage;
+		else
+			health=0;
+
+		if(health==0)
+            StartCoroutine(reconstructing());
     }
 }

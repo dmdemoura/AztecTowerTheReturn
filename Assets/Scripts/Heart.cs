@@ -13,7 +13,6 @@ public class Heart : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other)
 	{
-		Debug.Log("Yo5");
 		if(other.gameObject.CompareTag("Player"))
 		{
 			other.SendMessage("PickUpHeart");
