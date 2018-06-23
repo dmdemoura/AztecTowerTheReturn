@@ -10,6 +10,12 @@ public class CurseTower : MonoBehaviour {
 
 	[SerializeField]
 	float DPS, attackDelay;
+	[SerializeField] float reconstructTime;
+	[SerializeField] int health;
+
+
+	private enum State{active, broken}
+	private State state = State.active;
 
 	void Awake()
 	{
@@ -39,10 +45,29 @@ public class CurseTower : MonoBehaviour {
 
 	void Curse()
 	{
-		if(cursedEnemy != null)
-			cursedEnemy.SendMessage("GetHit", DPS);
-		else
-			CancelInvoke("Curse");
+		if(state==State.active){
+			if(cursedEnemy != null)
+				cursedEnemy.SendMessage("GetHit", DPS);
+			else
+				CancelInvoke("Curse");
+		}
 	}
-	
+
+    private IEnumerator reconstructing()
+    {
+        state = State.broken;
+        yield return new WaitForSeconds(reconstructTime);
+        state = State.active;
+    }
+
+    public void GetHit(int damage)
+	{
+		if(health>=damage)
+			health -= damage;
+		else
+			health=0;
+
+		if(health==0)
+            StartCoroutine(reconstructing());
+    }
 }

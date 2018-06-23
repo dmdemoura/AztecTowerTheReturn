@@ -12,6 +12,7 @@ public class Player : MonoBehaviour {
 	[SerializeField]	private int verticalSpeed;
 	[SerializeField]	private float enemyAttackDelay;
 	[SerializeField]	private float rayDistance;
+	[SerializeField]	private float zOffset;
 	private int raySide;
 	private bool turnedRight;
 	private bool attacking = false;
@@ -20,6 +21,7 @@ public class Player : MonoBehaviour {
 	void Start () {
 		rb = GetComponent<Rigidbody2D>();
 	}
+
 	void Update () {
 		if(rb.velocity.x > 0)
 		{
@@ -34,19 +36,17 @@ public class Player : MonoBehaviour {
 
 		//Movement
 		rb.velocity = new Vector2(horizontalSpeed*Input.GetAxis("Horizontal"), verticalSpeed*Input.GetAxis("Vertical"));	
-
+		this.transform.position = new Vector3(this.transform.position.x,
+								this.transform.position.y, this.transform.position.y);
 		//Attacking
 		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, raySide*Vector2.right, rayDistance, Enemies);
 		
-		if(Input.GetKeyDown(KeyCode.Z))
-			{
-			if(hit.collider!=null)
-			{
-				if(hit.transform.gameObject.tag=="Enemy")
-				{	
-					AttemptHit(hit.transform.gameObject);
-				}
-			}
+		if(Input.GetKeyDown(KeyCode.Z)
+			&& hit.collider!=null
+			&& hit.transform.gameObject.tag=="Enemy"
+			&& Mathf.Abs(hit.transform.position.z-this.transform.position.z)<=zOffset)
+		{
+			AttemptHit(hit.transform.gameObject);
 		}
 	}
 
