@@ -97,6 +97,7 @@ public class Enemy : MonoBehaviour {
 	void DrawAggro()
 	{
 		CancelInvoke("TrackStillTarget");
+        CancelInvoke("TrackMovingTarget");
 		currentTarget = GameObject.FindGameObjectWithTag("Player");
 		InvokeRepeating("TrackMovingTarget", 0f, Time.deltaTime);
 	}
