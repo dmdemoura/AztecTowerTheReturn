@@ -84,6 +84,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flame: {fileID: 1752330272268604}
   flameSpeed: 5
+  downtime: 10
+  uptime: 3
 --- !u!212 &212573663907025844
 SpriteRenderer:
   m_ObjectHideFlags: 1
