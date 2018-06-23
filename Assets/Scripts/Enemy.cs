@@ -111,6 +111,7 @@ public class Enemy : MonoBehaviour
 	{
 		CancelInvoke("TrackStillTarget");
 		CancelInvoke("TrackMovingTarget");
+        CancelInvoke("TrackMovingTarget");
 		currentTarget = GameObject.FindGameObjectWithTag("Player");
 		InvokeRepeating("TrackMovingTarget", 0f, Time.deltaTime);
 	}
