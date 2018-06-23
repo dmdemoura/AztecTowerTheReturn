@@ -11,13 +11,24 @@ public class Enemy : MonoBehaviour {
 	bool isAttacking = false;
 	enum FacingSide {Left, Right};
 	FacingSide facingDirection;
+	Rigidbody2D rigid;
 
 	[SerializeField]
 	float speed, xMoveOffset, yMoveOffset, hitRange, attackDelay, enemyDamage;
 
+	void Update()
+	{
+		if(rigid.velocity.x > 0)
+			facingDirection = FacingSide.Right;
+		else if(rigid.velocity.x < 0)
+			facingDirection = FacingSide.Left;
+	}
+
 	// Use this for initialization
 	void Awake()
 	 {
+		rigid = this.GetComponent<Rigidbody2D>();
+
 		targets.AddRange(GameObject.FindGameObjectsWithTag("Tower"));
 		targets.Add(GameObject.FindGameObjectWithTag("Player"));
 
@@ -37,20 +48,18 @@ public class Enemy : MonoBehaviour {
 	
 	void TrackStillTarget()
 	{
-		Debug.Log("Yo1");
 		if(!isAttacking)
 		{
 			if(Mathf.Abs(((Vector2)this.transform.position - targetPos).x) > xMoveOffset
 			|| Mathf.Abs(((Vector2)this.transform.position - targetPos).y) > yMoveOffset)
 				this.transform.position = Vector2.MoveTowards(this.transform.position, targetPos, speed);
 			else
-				AttemptAttack();
+				StartCoroutine(AttemptAttack());
 		}
 	}
 
 	void TrackMovingTarget()
 	{
-		Debug.Log("Yo2");
 		targetPos = currentTarget.transform.position;
 		Debug.Log(Mathf.Abs(((Vector2)this.transform.position - targetPos).x));
 
@@ -60,7 +69,7 @@ public class Enemy : MonoBehaviour {
 			|| Mathf.Abs(((Vector2)this.transform.position - targetPos).y) > yMoveOffset)
 				this.transform.position = Vector2.MoveTowards(this.transform.position, targetPos, speed);
 			else
-				AttemptAttack();
+				StartCoroutine(AttemptAttack());
 		}
 	}
 
