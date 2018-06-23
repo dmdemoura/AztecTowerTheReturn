@@ -67,6 +67,7 @@ public class ArrowTower : MonoBehaviour
 
     public void GetHit(int damage)
 	{
+        Debug.Log("ArrowTower: GetHit called");
 		if(health>=damage)
 			health -= damage;
 		else

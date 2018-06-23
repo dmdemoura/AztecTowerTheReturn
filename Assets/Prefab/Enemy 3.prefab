@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heart: {fileID: 1367489843422066, guid: 382fc66cf321ea147abe17d9bc796f61, type: 2}
-  zOffset: 0
+  zOffset: 10
   Player:
     serializedVersion: 2
     m_Bits: 512

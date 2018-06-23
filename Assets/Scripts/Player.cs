@@ -17,9 +17,11 @@ public class Player : MonoBehaviour {
 	private bool turnedRight;
 	private bool attacking = false;
 	private Rigidbody2D rb;
+    private Animator animator;
 
 	void Start () {
 		rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
 	}
 
 	void Update () {
@@ -33,6 +35,9 @@ public class Player : MonoBehaviour {
 			turnedRight = false;
 			raySide = -1;
 		}
+
+        //Animation
+        animator.SetFloat("direction", Input.GetAxis("Horizontal"));
 
 		//Movement
 		rb.velocity = new Vector2(horizontalSpeed*Input.GetAxis("Horizontal"), verticalSpeed*Input.GetAxis("Vertical"));	

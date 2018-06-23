@@ -29,10 +29,14 @@ public class Enemy : MonoBehaviour
 	{
 		this.transform.position = new Vector3(this.transform.position.x,
 								this.transform.position.y,this.transform.position.y);
-		if(rigid.velocity.x > 0)
-			facingDirection = FacingSide.Right;
-		else if(rigid.velocity.x < 0)
-			facingDirection = FacingSide.Left;
+        if (rigid.velocity.x > 0)
+        {
+            facingDirection = FacingSide.Right;
+        }
+        else if (rigid.velocity.x < 0)
+        {
+            facingDirection = FacingSide.Left;
+        }
 	}
 
 	// Use this for initialization
@@ -44,7 +48,9 @@ public class Enemy : MonoBehaviour
 		rigid = this.GetComponent<Rigidbody2D>();
 
 		targets.AddRange(GameObject.FindGameObjectsWithTag("Tower"));
-		targets.Add(GameObject.FindGameObjectWithTag("Player"));
+	    GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+            targets.Add(player);
 
 		if(targets.Count!=0){
 			List<float> distances = new List<float>();
@@ -68,9 +74,13 @@ public class Enemy : MonoBehaviour
 		{
 			if(Mathf.Abs((this.transform.position - targetPos).x) > xMoveOffset
 			|| Mathf.Abs((this.transform.position - targetPos).y) > yMoveOffset)
-				this.transform.position = Vector3.MoveTowards(this.transform.position, targetPos, speed);
+				//this.transform.position = Vector3.MoveTowards(this.transform.position, targetPos, speed);
+                rigid.velocity = (targetPos - transform.position).normalized * speed;
 			else
-				StartCoroutine(AttemptAttack());
+            {
+                rigid.velocity = Vector2.zero;
+                StartCoroutine(AttemptAttack());
+            }
 		}
 	}
 
@@ -80,18 +90,22 @@ public class Enemy : MonoBehaviour
 
 		if(!isAttacking)
 		{
-			if(Mathf.Abs((this.transform.position - targetPos).x) > xMoveOffset
-			|| Mathf.Abs((this.transform.position - targetPos).y) > yMoveOffset)
-				this.transform.position = Vector3.MoveTowards(this.transform.position, targetPos, speed);
-			else
-				StartCoroutine(AttemptAttack());
+            if (Mathf.Abs((this.transform.position - targetPos).x) > xMoveOffset
+            || Mathf.Abs((this.transform.position - targetPos).y) > yMoveOffset)
+                //this.transform.position = Vector3.MoveTowards(this.transform.position, targetPos, speed);
+                rigid.velocity = (targetPos - transform.position).normalized * speed;
+            else
+            {
+                rigid.velocity = Vector2.zero;
+                StartCoroutine(AttemptAttack());
+            }
 		}
 	}
 
 		IEnumerator AttemptAttack()
 	{
 		isAttacking = true;
-//		Debug.Log("Yo, i1m attacking");
+		Debug.Log("Yo, i1m attacking");
 
 		Vector2 hitDirection;
 
@@ -99,18 +113,23 @@ public class Enemy : MonoBehaviour
 			hitDirection = Vector2.left;
 		else
 			hitDirection = Vector2.right;
-		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, hitDirection, hitRange, Player);
-		if(hit)
+		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, hitDirection, hitRange, Towers);
+
+		if(hit.collider != null)
 		{
-			Debug.Log("Yo3");
-			yield return new WaitForSeconds(attackDelay);
-			if(hit.transform.gameObject.tag != "Enemy"
-			&& Mathf.Abs(hit.transform.position.z - this.transform.position.z)<= zOffset)
+			Debug.Log("Yo3"  + hit.transform.gameObject.name);
+			if((hit.transform.gameObject.tag == "Tower" || hit.transform.gameObject.tag == "Player")
+                && Mathf.Abs(hit.transform.position.z - this.transform.position.z)<= zOffset)
 			{
-				Debug.Log("Yo4");
+                yield return new WaitForSeconds(attackDelay);
+				Debug.Log("Enemy: attacking " + hit.transform.gameObject.name);
 				hit.transform.gameObject.SendMessage("GetHit", enemyDamage);
 			}
 		}
+        else
+        {
+            Debug.Log("Yo raycast fail");
+        }
 		isAttacking = false;
 	}
 
