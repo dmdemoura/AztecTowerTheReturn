@@ -23,8 +23,7 @@ public class Enemy : MonoBehaviour
 
 	[SerializeField]
 	float speed, xMoveOffset, yMoveOffset, hitRange, attackDelay, enemyDamage;
-	[SerializeField]
-	int health;
+	public int health;
 
 	void Update()
 	{
@@ -47,17 +46,19 @@ public class Enemy : MonoBehaviour
 		targets.AddRange(GameObject.FindGameObjectsWithTag("Tower"));
 		targets.Add(GameObject.FindGameObjectWithTag("Player"));
 
-		List<float> distances = new List<float>();
-		foreach(var target in targets)
-			distances.Add(Vector2.Distance(target.transform.position, this.transform.position));
-		
-		currentTarget = targets[distances.IndexOf(distances.Min())];
-		if(currentTarget.tag == "Player")
-			InvokeRepeating("TrackMovingTarget", 0f, Time.deltaTime);
-		else
-		{
-			targetPos = currentTarget.transform.position;
-			InvokeRepeating("TrackStillTarget", 0f, Time.deltaTime);
+		if(targets.Count!=0){
+			List<float> distances = new List<float>();
+			foreach(var target in targets)
+				distances.Add(Vector2.Distance(target.transform.position, this.transform.position));
+			
+			currentTarget = targets[distances.IndexOf(distances.Min())];
+			if(currentTarget.tag == "Player")
+				InvokeRepeating("TrackMovingTarget", 0f, Time.deltaTime);
+			else
+			{
+				targetPos = currentTarget.transform.position;
+				InvokeRepeating("TrackStillTarget", 0f, Time.deltaTime);
+			}
 		}
 	}		
 	
