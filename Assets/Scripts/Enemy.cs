@@ -22,8 +22,8 @@ public class Enemy : MonoBehaviour
 
 	[SerializeField]
 	float speed, xMoveOffset, yMoveOffset, hitRange, attackDelay, enemyDamage;
-	[SerializeField]
-	int health;
+	
+	public int health;
 
 	void Update()
 	{
