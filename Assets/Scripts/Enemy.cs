@@ -99,10 +99,10 @@ public class Enemy : MonoBehaviour
 			hitDirection = Vector2.left;
 		else
 			hitDirection = Vector2.right;
-		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, hitDirection, hitRange, PlayerAndTowers);
+		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, hitDirection, hitRange, Towers);
 		if(hit)
 		{
-//			Debug.Log("Yo3");
+			Debug.Log("Yo3");
 			yield return new WaitForSeconds(attackDelay);
 			if(hit.transform.gameObject.tag != "Enemy"
 			&& Mathf.Abs(hit.transform.position.z - this.transform.position.z)<= zOffset)

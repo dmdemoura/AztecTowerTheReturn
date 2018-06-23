@@ -166,7 +166,7 @@ Transform:
   m_LocalScale: {x: 50, y: 50, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &33821968
 MonoBehaviour:
@@ -409,11 +409,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4026314614771650, guid: 977377994057ff34b95d77a273e522b3, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 1.1918521
+      value: 3.32
       objectReference: {fileID: 0}
     - target: {fileID: 4026314614771650, guid: 977377994057ff34b95d77a273e522b3, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -5.2847
+      value: -5.77
       objectReference: {fileID: 0}
     - target: {fileID: 4026314614771650, guid: 977377994057ff34b95d77a273e522b3, type: 2}
       propertyPath: m_LocalPosition.z
@@ -438,6 +438,24 @@ Prefab:
     - target: {fileID: 4026314614771650, guid: 977377994057ff34b95d77a273e522b3, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114745742023724174, guid: 977377994057ff34b95d77a273e522b3,
+        type: 2}
+      propertyPath: reconstructTime
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114745742023724174, guid: 977377994057ff34b95d77a273e522b3,
+        type: 2}
+      propertyPath: health
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1626476315452862, guid: 977377994057ff34b95d77a273e522b3, type: 2}
+      propertyPath: m_TagString
+      value: Tower
+      objectReference: {fileID: 0}
+    - target: {fileID: 1730386216545490, guid: 977377994057ff34b95d77a273e522b3, type: 2}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 977377994057ff34b95d77a273e522b3, type: 2}
@@ -658,8 +676,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   speed: 0.1
-  xMoveOffset: 0.2
-  yMoveOffset: 1
+  xMoveOffset: 0.1
+  yMoveOffset: 0.5
   hitRange: 1000
   attackDelay: 1
   enemyDamage: 1
@@ -782,7 +800,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4136371029447438, guid: 382fc66cf321ea147abe17d9bc796f61, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 382fc66cf321ea147abe17d9bc796f61, type: 2}
