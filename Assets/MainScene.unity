@@ -769,7 +769,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DPS: 1
-  attackDelay: 0
+  attackDelay: 1
 --- !u!4 &1916613636
 Transform:
   m_ObjectHideFlags: 0
