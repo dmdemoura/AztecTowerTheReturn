@@ -4,13 +4,24 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
+	[SerializeField] GameObject panel;
+	
+	[SerializeField] int damage;
+	[SerializeField] int heal;
+	List<GameObject> allEnemies;
+		
+	public int FireTower = 0;
+	public int ArrowTower = 0;
+	public int CurseTower = 0;
 	int currentWave = 1;
 	int numberOfGroups = 0;
 	int currentGroups = 0;
 
 	[SerializeField]
 	GameObject[] enemies;
-
+	GameObject player;
+	Player plyr;
+	[SerializeField]	int special;
 	[SerializeField]
 	Transform spawnAreaReference;
 
@@ -20,9 +31,19 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	int initialSpawnAmount, initialSpawnInterval;
 
+	void Update()
+	{
+		if(Input.GetKeyDown(KeyCode.C) && plyr.hearts>special)
+		{	
+			hitAllEnemiesAndHeal();
+			plyr.hearts-=special;
+		}
+	}
+
 	void Awake()
 	{
 		StartGame();
+		plyr = GetComponent<Player>();
 	}
 
 	void StartGame()
@@ -30,7 +51,7 @@ public class GameManager : MonoBehaviour {
 		InvokeRepeating("SpawnerLoop",0f,initialSpawnInterval);
 	}
 
-	void NextWave()
+	public void NextWave()
 	{
 		currentWave++;
 		InvokeRepeating("SpawnerLoop",0f,initialSpawnInterval);
@@ -79,7 +100,21 @@ public class GameManager : MonoBehaviour {
 		if(numberOfGroups > (initialSpawnAmount * currentWave))
 		{
 			CancelInvoke("SpawnerLoop");
-			NextWave();
+			panel.SetActive(true);
+//			NextWave();
 		}
+	}
+
+	void hitAllEnemiesAndHeal()
+	{
+		allEnemies = new List<GameObject>();
+		allEnemies.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
+
+		foreach(var enemy in enemies)
+			enemy.GetComponent<Enemy>().health -= damage;
+
+		player = GameObject.FindGameObjectWithTag("Player");
+		player.GetComponent<Player>().health += heal;
+		
 	}
 }

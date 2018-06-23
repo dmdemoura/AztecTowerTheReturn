@@ -5,8 +5,8 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 	[SerializeField]	private LayerMask Enemies;
 	[SerializeField]	private int lives;
-	[SerializeField]	private int health;
-	[SerializeField]	private int hearts;
+	public int health;
+	public int hearts;
 	[SerializeField]	private int damage;
 	[SerializeField]	private int horizontalSpeed;
 	[SerializeField]	private int verticalSpeed;

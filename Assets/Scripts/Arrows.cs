@@ -12,7 +12,8 @@ public class Arrows : MonoBehaviour {
 	}
 
 	private void OnTriggerEnter2D(Collider2D other)
-	{
+	{	
+		//Debug.Log("Yo, vai atirar setas");
 		if(other.CompareTag("Enemy")
 		&& Mathf.Abs(other.transform.position.z-this.transform.position.z)<=zOffset)
 		{
