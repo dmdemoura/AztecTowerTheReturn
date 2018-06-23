@@ -62,7 +62,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &61983690342895128
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heart: {fileID: 1367489843422066, guid: 382fc66cf321ea147abe17d9bc796f61, type: 2}
+  zOffset: 0
   Player:
     serializedVersion: 2
     m_Bits: 512
@@ -112,7 +113,7 @@ MonoBehaviour:
   hitRange: 1000
   attackDelay: 1
   enemyDamage: 1
-  health: 100
+  health: 50
 --- !u!212 &212391879172116442
 SpriteRenderer:
   m_ObjectHideFlags: 1
