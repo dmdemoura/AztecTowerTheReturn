@@ -1,84 +1,60 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Player : MonoBehaviour {
+public class Player : GameCharacter {
 	[SerializeField]	private LayerMask Enemies;
-	[SerializeField]	private int lives;
-	public int health;
 	public int hearts;
-	[SerializeField]	private int damage;
-	[SerializeField]	private int horizontalSpeed;
-	[SerializeField]	private int verticalSpeed;
-	[SerializeField]	private float enemyAttackDelay;
-	[SerializeField]	private float rayDistance;
-	[SerializeField]	private float zOffset;
-	private int raySide;
-	private bool turnedRight;
-	private bool attacking = false;
+    [SerializeField] private float attackDelay;
+    [SerializeField] private float attackRadius;
+    [SerializeField] private int attackDistance;
+    private CooldownTimer attackCooldown;
 	private Rigidbody2D rb;
     private Animator animator;
 
 	void Start () {
+        Register();
+        attackCooldown = new CooldownTimer(attackDelay);
 		rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
 	}
 
-	void Update () {
-		if(rb.velocity.x > 0)
-		{
-			turnedRight = true;
-			raySide = 1;
-		}
-		else if(rb.velocity.x < 0)
-		{
-			turnedRight = false;
-			raySide = -1;
-		}
+	void FixedUpdate () {
 
         //Animation
         if (Input.GetAxis("Horizontal") == 0) animator.SetTrigger("startIdle");
         animator.SetFloat("direction", Input.GetAxis("Horizontal"));
 
-		//Movement
-		rb.velocity = new Vector2(horizontalSpeed*Input.GetAxis("Horizontal"), verticalSpeed*Input.GetAxis("Vertical"));	
-		this.transform.position = new Vector3(this.transform.position.x,
-								this.transform.position.y, this.transform.position.y);
+        //Movement
+        Move(new Vector2(Input.GetAxis("Horizontal") * MaxSpeed, Input.GetAxis("Vertical") * MaxSpeed));
+
 		//Attacking
-		RaycastHit2D hit = Physics2D.Raycast(this.transform.position, raySide*Vector2.right, rayDistance, Enemies);
-		
-		if(Input.GetKeyDown(KeyCode.Z)
-			&& hit.collider!=null
-			&& hit.transform.gameObject.tag=="Enemy"
-			&& Mathf.Abs(hit.transform.position.z-this.transform.position.z)<=zOffset)
-		{
-			AttemptHit(hit.transform.gameObject);
-		}
-	}
+        attackCooldown.Update();
 
-	private void AttemptHit(GameObject enemy)
-	{
-		if(attacking==false)
-		{
-			Debug.Log("foi");
-			enemy.SendMessage("GetHit",damage);
-			enemy.SendMessage("DrawAggro");
-			StartCoroutine(attackDelay());
-		}
-	}
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            if (attackCooldown.Available)
+            {
+                GameCharacter enemy = FindGameCharInDirection(MovementDirection, attackRadius, attackDistance, "Enemy");
+                if (enemy != null)
+                {
+                    attackCooldown.Activate();
+                    enemy.SendMessage("GetHit", Damage);
+                    enemy.SendMessage("DrawAggro");
+                }
+            }
+        } 
 
-	public void GetHit(int damage)
-	{
-		health -= damage;
 	}
-	private IEnumerator attackDelay()
-	{	
-		attacking = true;
-		yield return new WaitForSeconds(enemyAttackDelay);
-		attacking = false;
-	}
+    protected override void OnDeath()
+    {
+        base.OnDeath();
+        Destroy(this.gameObject);
+        SceneManager.LoadScene(0);
+    }
 
-	public void PickUpHeart(){
+    public void PickUpHeart(){
 		hearts++;
 	}
 }		

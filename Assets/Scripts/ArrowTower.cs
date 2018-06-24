@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArrowTower : MonoBehaviour
+public class ArrowTower : Tower
 {
     [SerializeField] private GameObject arrow;
     [SerializeField] private float fireRate;
     [SerializeField] private float arrowSpawnDistance;
     [SerializeField] private float arrowVelocity;
-    [SerializeField] private float reconstructTime;
-    [SerializeField] private int health;
+    private Quaternion rotation;
     private enum State{broken, active};
     private State state = State.active;
 
@@ -19,12 +18,13 @@ public class ArrowTower : MonoBehaviour
     }
     private void Update()
     {
-        GameObject enemy = GetClosestGameObjectWithTag("Enemy", transform.position);
+        //GameObject enemy = GetClosestGameObjectWithTag("Enemy", transform.position);
+        GameCharacter enemy = FindClosestGameChar("Enemy");
         if (enemy != null)
         {
             Vector3 direction = enemy.transform.position - transform.position;
             float angle = Vector3.SignedAngle(Vector3.right, direction, Vector3.forward);
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         }
     }
     private GameObject GetClosestGameObjectWithTag(string tag, Vector3 position)
@@ -52,28 +52,9 @@ public class ArrowTower : MonoBehaviour
     }
     private void Fire()
     {   
-        if(state==State.active){
-            GameObject newArrow = Instantiate(arrow, transform.position + transform.rotation * new Vector3(arrowSpawnDistance,0), transform.rotation);
-            newArrow.GetComponent<Rigidbody2D>().velocity = transform.rotation * new Vector3(arrowVelocity,0);
+        if(!IsBroken){
+            GameObject newArrow = Instantiate(arrow, transform.position + rotation * new Vector3(arrowSpawnDistance,0), rotation);
+            newArrow.GetComponent<Rigidbody2D>().velocity = rotation * new Vector3(arrowVelocity,0);
         }
-    }
-
-    private IEnumerator reconstructing()
-    {
-        state = State.broken;
-        yield return new WaitForSeconds(reconstructTime);
-        state = State.active;
-    }
-
-    public void GetHit(int damage)
-	{
-        Debug.Log("ArrowTower: GetHit called");
-		if(health>=damage)
-			health -= damage;
-		else
-			health=0;
-
-		if(health==0)
-            StartCoroutine(reconstructing());
     }
 }

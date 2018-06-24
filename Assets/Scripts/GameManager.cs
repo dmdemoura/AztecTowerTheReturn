@@ -3,16 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-
-	[SerializeField] GameObject panel;
-	
-	[SerializeField] int damage;
-	[SerializeField] int heal;
-	List<GameObject> allEnemies;
+	[SerializeField] float damage;
+    [SerializeField] float damagetToHealMult;
 		
-	public int FireTower = 0;
-	public int ArrowTower = 0;
-	public int CurseTower = 0;
 	int currentWave = 1;
 	int numberOfGroups = 0;
 	int currentGroups = 0;
@@ -31,9 +24,9 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	int initialSpawnAmount, initialSpawnInterval;
 
-	void Update()
+	void FixedUpdate()
 	{
-		if(Input.GetKeyDown(KeyCode.C) && plyr.hearts>special)
+		if(Input.GetKeyDown(KeyCode.C) && plyr.hearts >= special)
 		{	
 			hitAllEnemiesAndHeal();
 			plyr.hearts-=special;
@@ -43,7 +36,8 @@ public class GameManager : MonoBehaviour {
 	void Awake()
 	{
 		StartGame();
-		plyr = GetComponent<Player>();
+        player = GameObject.FindGameObjectWithTag("Player");
+		plyr = player.GetComponent<Player>();
 	}
 
 	void StartGame()
@@ -100,21 +94,26 @@ public class GameManager : MonoBehaviour {
 		if(numberOfGroups > (initialSpawnAmount * currentWave))
 		{
 			CancelInvoke("SpawnerLoop");
-			panel.SetActive(true);
-//			NextWave();
+			NextWave();
 		}
 	}
 
 	void hitAllEnemiesAndHeal()
 	{
-		allEnemies = new List<GameObject>();
-		allEnemies.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
+        if (enemies == null)
+            return;
+        float damageDealt = 0;
 		foreach(var enemy in enemies)
-			enemy.GetComponent<Enemy>().health -= damage;
+        {
+			enemy.GetComponent<Enemy>().Health -= damage;
+            damageDealt += Mathf.Min(enemy.GetComponent<Enemy>().MaxHealth, damage);
+               
+        }
 
 		player = GameObject.FindGameObjectWithTag("Player");
-		player.GetComponent<Player>().health += heal;
+		player.GetComponent<Player>().Health += damageDealt * damagetToHealMult;
 		
 	}
 }

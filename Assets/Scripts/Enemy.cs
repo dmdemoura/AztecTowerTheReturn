@@ -3,72 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour 
+public class Enemy : GameCharacter
 {
-	List<GameObject> targets = new List<GameObject>();
-	GameObject currentTarget;
-	[SerializeField] GameObject heart;
-	[SerializeField] float zOffset;
-	Vector3 targetPos;
-	bool isAttacking = false;
-	enum FacingSide {Left, Right};
-	FacingSide facingDirection;
-	Rigidbody2D rigid;
-	[SerializeField]
-	LayerMask Player;
-	[SerializeField]
-	LayerMask Towers;
-	int PlayerAndTowers;
+	[SerializeField] private GameObject heart;
+    [SerializeField] private float attackDelay;
+    [SerializeField] private float attackRadius;
+    [SerializeField] private int attackDistance;
+    private Animator animator;
+    private GameCharacter target;
+    private CooldownTimer attackCooldown;
 
-
-	[SerializeField]
-	float speed, xMoveOffset, yMoveOffset, hitRange, attackDelay, enemyDamage;
-	public int health;
-
-	void Update()
+    private void Awake()
+    {
+    }
+    private void Start()
 	{
-		this.transform.position = new Vector3(this.transform.position.x,
-								this.transform.position.y,this.transform.position.y);
-        if (rigid.velocity.x > 0)
-        {
-            facingDirection = FacingSide.Right;
-        }
-        else if (rigid.velocity.x < 0)
-        {
-            facingDirection = FacingSide.Left;
-        }
+        Register();
+        attackCooldown = new CooldownTimer(attackDelay);
+        animator = GetComponent<Animator>();
 	}
+    private void FixedUpdate()
+    {
+        if (animator)
+        {
+            animator.SetFloat("direction", MovementDirection.x);
+        }
 
-	// Use this for initialization
-	void Awake()
-	 {
+        target = FindClosestGameChar("Player");
+        attackCooldown.Update();
+        if (target != null)
+            TrackMovingTarget();
+    }
 
-		PlayerAndTowers = Player.value | Towers.value;
-
-		rigid = this.GetComponent<Rigidbody2D>();
-
-		targets.AddRange(GameObject.FindGameObjectsWithTag("Tower"));
-	    GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-            targets.Add(player);
-
-		if(targets.Count!=0){
-			List<float> distances = new List<float>();
-			foreach(var target in targets)
-				distances.Add(Vector2.Distance(target.transform.position, this.transform.position));
-			
-			currentTarget = targets[distances.IndexOf(distances.Min())];
-			if(currentTarget.tag == "Player")
-				InvokeRepeating("TrackMovingTarget", 0f, Time.deltaTime);
-			else
-			{
-				targetPos = currentTarget.transform.position;
-				InvokeRepeating("TrackStillTarget", 0f, Time.deltaTime);
-			}
-		}
-	}		
-	
-	void TrackStillTarget()
+    /*void TrackStillTarget()
 	{
 		if(!isAttacking)
 		{
@@ -82,27 +49,26 @@ public class Enemy : MonoBehaviour
                 StartCoroutine(AttemptAttack());
             }
 		}
-	}
+	}*/
 
-	void TrackMovingTarget()
+    void TrackMovingTarget()
 	{
-		targetPos = currentTarget.transform.position;
+		Vector3 targetPos = target.transform.position;
 
-		if(!isAttacking)
-		{
-            if (Mathf.Abs((this.transform.position - targetPos).x) > xMoveOffset
-            || Mathf.Abs((this.transform.position - targetPos).y) > yMoveOffset)
-                //this.transform.position = Vector3.MoveTowards(this.transform.position, targetPos, speed);
-                rigid.velocity = (targetPos - transform.position).normalized * speed;
-            else
+        if ((transform.position - targetPos).magnitude >= attackDistance)
+            Move((targetPos - transform.position).normalized * MaxSpeed);
+        else
+        {
+            if (attackCooldown.Available)
             {
-                rigid.velocity = Vector2.zero;
-                StartCoroutine(AttemptAttack());
+                animator.SetTrigger("startAttack");
+                attackCooldown.Activate();
+                target.SendMessage("GetHit", Damage);
             }
-		}
+        }
 	}
 
-		IEnumerator AttemptAttack()
+/*		IEnumerator AttemptAttack()
 	{
 		isAttacking = true;
 		Debug.Log("Yo, i1m attacking");
@@ -132,32 +98,22 @@ public class Enemy : MonoBehaviour
         }
 		isAttacking = false;
 	}
-
+    */
 	void DrawAggro()
 	{
 		CancelInvoke("TrackStillTarget");
 		CancelInvoke("TrackMovingTarget");
-		currentTarget = GameObject.FindGameObjectWithTag("Player");
+        target = GameObject.FindGameObjectWithTag("Player").GetComponent<GameCharacter>();
 		InvokeRepeating("TrackMovingTarget", 0f, Time.deltaTime);
 	}
 
-	void GetHit(int damage)
+	protected override void OnDeath()
 	{
-		if(health>=damage)
-			health -= damage;
-		else
-			health=0;
-
-		if(health==0)
-			Die();
-	}
-
-	void Die()
-	{
+        base.OnDeath();
 		if(Random.Range(0f,1f)<=0.3f)
 		{
 			Instantiate(heart,this.transform.position,Quaternion.identity);
 		}
-		Destroy(this.gameObject);
+        Destroy(this.gameObject);
 	}
 }

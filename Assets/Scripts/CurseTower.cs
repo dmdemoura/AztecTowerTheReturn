@@ -33,10 +33,10 @@ public class CurseTower : MonoBehaviour {
 
 		if(enemies.Count > 0)
 		{
-			List<int> hp = new List<int>();
+			List<float> hp = new List<float>();
 
 			foreach(var enemy in enemies)
-				hp.Add(enemy.GetComponent<Enemy>().health);
+				hp.Add(enemy.GetComponent<Enemy>().Health);
 
 			cursedEnemy = enemies[hp.IndexOf(hp.Max())].GetComponent<Enemy>();
 			InvokeRepeating("Curse", 0f, 1f);

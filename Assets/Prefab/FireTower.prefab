@@ -21,7 +21,9 @@ GameObject:
   - component: {fileID: 4937905003667240}
   - component: {fileID: 212973412241861158}
   - component: {fileID: 114753800830639968}
-  m_Layer: 0
+  - component: {fileID: 114495961575552222}
+  - component: {fileID: 61260619878472288}
+  m_Layer: 10
   m_Name: FireTower
   m_TagString: Tower
   m_Icon: {fileID: 0}
@@ -39,7 +41,7 @@ GameObject:
   - component: {fileID: 212573663907025844}
   - component: {fileID: 61996063941464290}
   - component: {fileID: 114596008102251876}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Flame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -66,13 +68,38 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1197378083088526}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.73, y: -4.17, z: 0}
+  m_LocalPosition: {x: -2.73, y: -4.17, z: -4.17}
   m_LocalScale: {x: 1.3, y: 1.3, z: 1}
   m_Children:
   - {fileID: 4028674646658956}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &61260619878472288
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1197378083088526}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.004650533, y: -0.29299012}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.28, y: 1.28}
+    newSize: {x: 0.16, y: 0.16}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.7312243, y: 0.69401973}
+  m_EdgeRadius: 0
 --- !u!61 &61996063941464290
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -88,16 +115,29 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 6.4, y: 1.28}
+    newSize: {x: 0.16, y: 0.16}
+    adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.0001, y: 0.0001}
+  m_Size: {x: 7.5, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &114495961575552222
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1197378083088526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f9256c2494a7c4cb2f4b455e15005c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tower: {fileID: 114753800830639968}
+  cost: 1
 --- !u!114 &114596008102251876
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -109,25 +149,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2841b3f1f4c244d4d828b10f66ad3fc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
+  damage: 20
 --- !u!114 &114753800830639968
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1197378083088526}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c7edda91f467c34baa88fe8f7ff8d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 30
+  health: 30
+  damage: 0
+  maxSpeed: 0
+  hitBlinkDuration: 0
+  repairDelay: 15
   flame: {fileID: 1752330272268604}
   flameSpeed: 5
   downtime: 10
-  brokentime: 3
   uptime: 3
-  health: 30
-  healthMax: 30
 --- !u!212 &212573663907025844
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -171,7 +214,7 @@ SpriteRenderer:
   m_Size: {x: 0.16, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
 --- !u!212 &212973412241861158
 SpriteRenderer:
@@ -209,12 +252,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: fcd5f03d3bf269a49af3c512e85e7b1e, type: 3}
-  m_Color: {r: 0.8773585, g: 0.8773585, b: 0.8773585, a: 1}
+  m_Color: {r: 1, g: 0.25, b: 0.25, a: 0.3372549}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 0.16, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0

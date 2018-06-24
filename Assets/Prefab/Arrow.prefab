@@ -94,13 +94,13 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1062271892206844}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ddb60077e01bc084b9d43000073ef653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   zOffset: 1
-  damage: 2
+  damage: 20
 --- !u!212 &212463252858718304
 SpriteRenderer:
   m_ObjectHideFlags: 1
